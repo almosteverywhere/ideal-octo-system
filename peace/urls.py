@@ -17,5 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^$', views.index, name='index'),
+    # ex: /polls/5/
+    url(r'^(?P<attack_id>[0-9]+)/$', views.detail, name='detail'),
 ]
