@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 class Attack(models.Model):
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     num_dead = models.IntegerField()
