@@ -1,0 +1,9 @@
+{% if latest_attack_list %}
+    <ul>
+    {% for attack in latest_attack_list %}
+        <li><a href="/attacks/{{ attack.id }}/">{{ attack.description }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No attack are available.</p>
+{% endif %}
