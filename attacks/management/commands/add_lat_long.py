@@ -42,9 +42,18 @@ class Command(BaseCommand):
             logger.setLevel(logging.DEBUG)
             logger.debug('Using verbose output')
 
+        # for each attack:
+        # get the location,
+        # send to google maps
+        # get the lat and long coordinates
+        # maybe use memoization so don't have to repeat
+        # the same query a million times? 
+        # info is denormalized in the db because don't
+        # want to deal with different locations 
+        # dealing with locations is the worsssssse
+
         qs = Attack.objects.all()
         total = qs.count()
-
 
         logger.info("Importing attack data")
         logger.info("Starting with %s total attacks" % total)

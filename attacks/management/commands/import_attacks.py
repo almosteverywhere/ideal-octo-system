@@ -59,10 +59,13 @@ class Command(BaseCommand):
             if row['date'] == "date":
                 continue
             a = Attack()
-            a.date = parser.parse(row['date'])
+            try:
+                a.date = parser.parse(row['date'])
+            except:
+                continue 
             a.country = row['country']
             a.city = row['city']
-            a.num_dead= row['killed']
+            a.num_dead = row['killed']
             a.num_injured = row['injured'] 
             a.description = row['description'] 
             print a 
