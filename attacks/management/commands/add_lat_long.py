@@ -8,12 +8,13 @@ logger = logging.getLogger('peace')
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
-from attacks.models import Attack 
+from attacks.models import Attack, Location 
 
 import csv
 from dateutil import parser
-
-gmaps = googlemaps.Client(key='AIzaSyAApYWyjVYCXs3P91Fn7NEu85XUu9Jpvm0')
+# AIzaSyDv47jLb3cJ9H-ttYVKPAyPGoa2Yl3zd-A
+# gmaps = googlemaps.Client(key='AIzaSyAApYWyjVYCXs3P91Fn7NEu85XUu9Jpvm0')
+gmaps = googlemaps.Client(key='AIzaSyCYZUr3mfLai-9WsnAkd3cW40zWsQuXl2c')
 
 class Command(BaseCommand):
     """
@@ -62,80 +63,40 @@ class Command(BaseCommand):
         logger.info("Adding lat long to locations")
         logger.info("Starting with %s total locations" % total)
 
-        locations = {}
-        import pdb; pdb.set_trace()
-        for a in qs:
-            if not a.lat and not a.long:
-                location = "%s, %s" % (a.city, a.country)
-                # use memoization
-                if location in locations:
-                    pass 
-                    # locations[location] += 1
-                else:
-                    geocode_result = gmaps.geocode(location)
+        for l in qs:
+
+            # don't re-geocode 
+            # if both are 0, haven't done before, if both are -1, can't find it, don't retry   
+            if (l.lat == 0 and l.lng == 0):
+                location_string = "%s, %s" % (l.city, l.country)
+                
+                geocode_result = gmaps.geocode(location_string)
                     # print "result for %s %s" % (location, geocode_result)
-                    if geocode_result:
-                        count += 1 
-                        try:
-                            lat = geocode_result[0]['geometry']['location']['lat']
-                            lng = geocode_result[0]['geometry']['location']['lng']
-                        except:
-                            import pdb; pdb.set_trace()
+                if geocode_result:
+                    count += 1 
+                    try:
+                        lat = geocode_result[0]['geometry']['location']['lat']
+                        lng = geocode_result[0]['geometry']['location']['lng']
+                    except:
+                        import pdb; pdb.set_trace()
+                        l.lat = -1
+                        l.lng = -1
+                        l.save()
+                
                     
-                        locations[location] = {}
-                        locations[location]['lat'] = lat
-                        locations[location]['lng'] = lng
-                        if save:
-                            a.latitude = lat
-                            a.longitude = lng
-                            a.save()
-                    if not geocode_result:
-                        print "No result for location %s" % location
-                        not_found +=1
+                    l.lat = lat
+                    l.lng = lng
+                    l.save()
+                    print "Saving lat and long for %s: lat %s, lng %s" % (location_string, lat, lng)
 
-            for k in locations.keys():
-                print "%s: %s" % (k, locations[k])
+                if not geocode_result:
+                    print "No result for location %s" % location_string
+                    not_found +=1
+                    l.lat = -1
+                    l.lng = -1
+                    l.save()
 
-        # write it to a csv:
-
-
-        # count = 0
-        # processed = 0
-
-        # csvfile = codecs.open('attacks.csv', 'r')
-        # fieldnames = ['date', 'country', 'city', 'killed', 'injured', 'description']
-        # csvreader = csv.DictReader(csvfile, fieldnames=fieldnames)
-
-        # for row in csvreader:
-        #     if row['date'] == "date":
-        #         continue
-        #     a = Attack()
-        #     a.date = parser.parse(row['date'])
-        #     a.country = row['country']
-        #     a.city = row['city']
-        #     a.num_dead= row['killed']
-        #     a.num_injured = row['injured'] 
-        #     a.description = row['description'] 
-        #     print a 
-        #     a.save()
-
-        #     count += 1 
-
-    #         date = models.DateTimeField(blank=True, null=True)
-    # city = models.CharField(max_length=100)
-    # country = models.CharField(max_length=100)
-    # num_dead = models.IntegerField()
-    # num_injured = models.IntegerField()
-    # description = models.CharField(max_length=500)
-
-
-        
-        # open csv
-        # read record 1-by-1
-        # save each one into a model
-        # print count at the end
-        # do we have some kind of unique identifier? 
-
+            
         if save:
             logger.info("%s attacks saved." % count)
             logger.info("%s result not found." % not_found)

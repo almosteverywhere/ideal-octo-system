@@ -11,8 +11,8 @@ class Attack(models.Model):
     num_dead = models.IntegerField()
     num_injured = models.IntegerField()
     description = models.CharField(max_length=500)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lng = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
     unique_together = ('date', 'description')
 
@@ -25,8 +25,8 @@ class Attack(models.Model):
 class Location(models.Model):
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, default=0)
+    lng = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
     unique_together = ('city', 'country')
 
