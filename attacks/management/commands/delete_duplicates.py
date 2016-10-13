@@ -55,7 +55,8 @@ class Command(BaseCommand):
 
         # kind of lazy way to do this
         for a in Attack.objects.all():
-            dupes = Attack.objects.all().filter(description=a.description).filter(date=a.date).filter(num_dead=a.num_dead).filter(city=a.city)
+            # attacks_attack.date, attacks_attack.description
+            dupes = Attack.objects.all().filter(description=a.description).filter(date=a.date)
             if dupes.count() > 1:
                 dupe_count = 1
                 # delete all but first one

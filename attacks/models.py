@@ -18,11 +18,11 @@ class Attack(models.Model):
     lng = models.DecimalField(max_digits=9, decimal_places=6, default=0)
 
     # let it be null for now while we populate relationship
-    location = models.ForeignKey(Location, on_delete=models.PROTECT, null=True)
+    location = models.ForeignKey('Location', on_delete=models.PROTECT, null=True)
     
 
     class Meta:
-        unique_together = ('date', 'description')
+        unique_together = ('date', 'description', 'num_injured', 'num_dead')
 
     def __unicode__(self):
         return '%s, %s: %s' % (self.city, self.country, self.description)
