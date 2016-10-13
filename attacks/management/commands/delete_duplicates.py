@@ -9,8 +9,6 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 
 from attacks.models import Attack 
 
-import csv
-import codecs
 from dateutil import parser
 
 class Command(BaseCommand):
