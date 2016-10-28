@@ -15,12 +15,22 @@ def detail(request, attack_id):
     attack = get_object_or_404(Attack, pk=attack_id)
     return render(request, 'attacks/detail.html', {'attack': attack})
 
-def map(request):
-    attacks = Attack.objects.order_by('-date').exclude(lat=0).exclude(lat=-1).filter(date__gt='1999-01-01')
-    context = {
-        'attacks': attacks,
-    }
+# extract year from date
+# def year(request, year):
+#     attacks = Attack.objects.order_by('-date').exclude(lat=0).exclude(lat=-1).filter(date__gt='1999-01-01')
+#     context = {
+#         'attacks': attacks,
+#     }
+#     attack = get_object_or_404(Attack, pk=attack_id)
+#     return render(request, 'attacks/detail.html', {'attack': attack})
+
+
+# def map(request):
+#     attacks = Attack.objects.order_by('-date').exclude(lat=0).exclude(lat=-1).filter(date__gt='1999-01-01')
+#     context = {
+#         'attacks': attacks,
+#     }
     
-    # attack = get_object_or_404(Attack, pk=attack_id)
-    return render(request, 'attacks/map.html', context)
+#     # attack = get_object_or_404(Attack, pk=attack_id)
+#     return render(request, 'attacks/map.html', context)
 

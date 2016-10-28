@@ -20,5 +20,6 @@ from attacks import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^attacks/', include('attacks.urls')),
+    url(r'^maps/', include('maps.urls')),
 ]
 
